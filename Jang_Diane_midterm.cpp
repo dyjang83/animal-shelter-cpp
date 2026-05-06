@@ -28,7 +28,7 @@ struct AdoptionRecord {
         cout << adopterName << endl;
         if (previous) {
             cout << "Previously adopted by ";
-            previous->PrintHistory(); // Recursive step
+            previous->printHistory(); // Recursive step
         }
     }
 };
@@ -160,5 +160,7 @@ void demonstrateRawPointer() {
 
 int main() {
     // Shelter holds animals via shared_ptr<Animal> so we can store any subclass polymorphically.
-    
+    vector<shared_ptr<Animal>> shelter;
+
+    // undoStack holds the most recently adopted
 }
