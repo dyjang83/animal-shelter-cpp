@@ -248,6 +248,21 @@ int main() {
             undoStack.push_back(adopted);
 
             cout << adopted->getName() << " has been adopted by " << adopter << "." << endl;
+        } else if (choice == 3) {
+            // View all animals
+            cout << "Current Shelter Residents:" << endl;
+            if (shelter.empty()) {
+                cout << "[None - all animals have been adopted!]" << endl;
+            } else {
+                // Polymorphism: we call printInfo() through a shared_ptr<Animal>,
+                // and the correct override is dispatched at runtime via the vtable.
+                for (unsigned int i = 0; i < shelter.size(); ++i) {
+                    cout << " " << (i + 1) << ". ";
+                    shelter[i]->printInfo();
+                }
+            }
+        } else if (choice == 4) {
+            
         }
         
 
