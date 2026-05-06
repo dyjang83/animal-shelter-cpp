@@ -1,0 +1,11 @@
+# Compiled binaries
+shelter
+*.o
+*.out
+*.exe
+
+# macOS
+.DS_Store
+
+# VS Code
+.vscode/
