@@ -162,5 +162,94 @@ int main() {
     // Shelter holds animals via shared_ptr<Animal> so we can store any subclass polymorphically.
     vector<shared_ptr<Animal>> shelter;
 
-    // undoStack holds the most recently adopted
+    // undoStack holds the most recently adopted animal so the user can undo the last adoption.
+    vector<shared_ptr<Animal>> undoStack;
+
+    cout << "Welcome to the Animal Shelter Manager" << endl;
+    printDivider();
+
+    // Run the raw pointer demo.
+    demonstrateRawPointer();
+    printDivider();
+
+    int choice = -1;
+    while (choice != 0) {
+        printMenu();
+        cin >> choice;
+        cin.ignore(10000, '\n');
+
+        if (choice == 1) {
+            // Intake animal
+            cout << "Enter animal type (dog/cat/rabbit): ";
+            string type;
+            getline(cin, type);
+
+            cout << "Enter name: ";
+            string name;
+            getline(cin, name);
+
+            cout << "Enter age: ";
+            int age;
+            cin >> age;
+            cin.ignore(10000, '\n');
+
+            // Readmission check: if an animal with this name was recently
+            // adopted out, pull that same shared_ptr back into the shelter
+            // so that its adoption history is preserved across the round-trip.
+            int undoIdx = findAnimalIndex(undoStack, name);
+            if (undoIdx != -1) {
+                shared_ptr<Animal> returning = undoStack[undoIdx];
+                undoStack.erase(undoStack.begin() + undoIdx);
+                shelter.push_back(returning);
+                cout << name << " has been readmitted to the shelter." << endl;
+            } else {
+                // New intake.
+                // shared_ptr is stored as shared_ptr<Animal>, demonstrating polymorphism.
+                shared_ptr<Animal> newAnimal;
+                if (type == "dog") {
+                    newAnimal = make_shared<Dog>(name, age);
+                } else if (type == "cat") {
+                    newAnimal = make_shared<Cat>(name, age);
+                } else {
+                    newAnimal = make_shared<Rabbit>(name, age);
+                }
+                shelter.push_back(newAnimal);
+                cout << name << " the " << type << " has been added to the shelter." << endl;
+            }
+        } else if (choice == 2) {
+            // Adopt animal
+            if (shelter.empty()) {
+                cout << "No animals available to adopt." << endl;
+                printDivider();
+                continue;
+            }
+            
+            cout << "Enter the name of the animal to adopt: ";
+            string animalName;
+            getline(cin, animalName);
+            
+            int idx = findAnimalIndex(shelter, animalName);
+            if (idx == -1) {
+                cout << "No animal named " << animalName << "found in the shelter." << endl;
+                printDivider();
+                continue;
+            }
+
+            cout << "Enter adopter's name: ";
+            string adopter;
+            getline(cin, adopter);
+
+            // Update the animal's recursive history chain.
+            shelter[idx]->recordAdoption(adopter);
+
+            // Save the adopted animal in the undo buffer, then remove it from the shelter.
+            shared_ptr<Animal> adopted = shelter[idx];
+            shelter.erase(shelter.begin() + idx);
+            undoStack.push_back(adopted);
+
+            cout << adopted->getName() << " has been adopted by " << adopter << "." << endl;
+        }
+        
+
+    }
 }
