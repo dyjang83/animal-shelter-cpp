@@ -141,3 +141,24 @@ void printMenu() {
     cout << "6. Undo Last Adoption" << endl;
     cout << "0. Exit" << endl;
 }
+
+// Raw pointer demonstration for contrast with smart pointers.
+// Why smart pointers are safer:
+//  - With 'new', we must remember to call 'delete' exactly once. If we forget, memory leak happens.
+//    If we delete twice, we get undefined behavior.
+//  - If an exception is thrown between 'new' and 'delete', the delete is skipped and memory leaks.
+//  - shared_ptr and unique_ptr automatically delete the object when they go out of scope. 
+//    They also make ownership explicit (unique = sole owner, shared = reference counted)
+
+void demonstrateRawPointer() {
+    cout << "[Raw pointer demo]" << endl;
+    Dog* rawDog = new Dog("RawRex", 5); // manual allocation
+    rawDog->printInfo();
+    delete rawDog; // Must manually free, which is easy to forget. Smart pointers would do this automatically.
+    rawDog = nullptr; // avoid dangling pointer
+}
+
+int main() {
+    // Shelter holds animals via shared_ptr<Animal> so we can store any subclass polymorphically.
+    
+}
