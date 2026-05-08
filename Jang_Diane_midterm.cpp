@@ -193,6 +193,12 @@ int main() {
             cin >> age;
             cin.ignore(10000, '\n');
 
+            if (type != "dog" && type != "cat" && type != "rabbit") {
+                cout << "Invalid animal type. Please enter dog, cat, or rabbit." << endl;
+                printDivider();
+                continue;
+            }
+
             // Readmission check: if an animal with this name was recently
             // adopted out, pull that same shared_ptr back into the shelter
             // so that its adoption history is preserved across the round-trip.
