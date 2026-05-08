@@ -62,7 +62,7 @@ public:
         return age;
     }
 
-    // Adds a new adopter to the fron of the history chain
+    // Adds a new adopter to the front of the history chain
     void recordAdoption(const string& adopterName) {
         unique_ptr<AdoptionRecord> newRecord = make_unique<AdoptionRecord>(adopterName);
         newRecord->previous = move(history);
@@ -101,7 +101,7 @@ public:
     }
 };
 
-// Rabit (derived class)
+// Rabbit (derived class)
 class Rabbit : public Animal {
 public:
     Rabbit(const string& name, int age) 
@@ -230,7 +230,7 @@ int main() {
             
             int idx = findAnimalIndex(shelter, animalName);
             if (idx == -1) {
-                cout << "No animal named " << animalName << "found in the shelter." << endl;
+                cout << "No animal named " << animalName << " found in the shelter." << endl;
                 printDivider();
                 continue;
             }
