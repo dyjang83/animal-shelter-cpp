@@ -262,9 +262,64 @@ int main() {
                 }
             }
         } else if (choice == 4) {
-            
-        }
-        
+            // View adoption history
+            cout << "Enter the name of the animal to view history: ";
+            string animalName;
+            getline(cin, animalName);
 
+            // Search the shelter and the undo stack.
+            int idx = findAnimalIndex(shelter, animalName);
+            shared_ptr<Animal> target = nullptr;
+
+            if (idx != -1) {
+                target = shelter[idx];
+            } else {
+                int undoIdx = findAnimalIndex(undoStack, animalName);
+                if (undoIdx != -1) {
+                    target = undoStack[undoIdx];
+                }
+            }
+
+            if (!target) {
+                cout << "No animal named \"" << animalName << "\" found." << endl;
+            } else {
+                cout << "Adoption History for " << target->getName() << ":" << endl;
+                target->printAdoptionHistory();
+            }
+        } else if (choice == 5) {
+            // Search for an animal without adopting
+            cout << "Enter the name to search for: ";
+            string animalName;
+            getline(cin, animalName);
+
+            int idx = findAnimalIndex(shelter, animalName);
+            if (idx == -1) {
+                cout << "No animal named \"" << animalName << "\" is currently in the shelter." << endl;
+            } else {
+                cout << "Found: ";
+                shelter[idx]->printInfo();
+            }
+        } else if (choice == 6) {
+            // Undo last adoption
+            if (undoStack.empty()) {
+                cout << "Nothing to undo - no recent adoptions." << endl;
+            } else {
+                shared_ptr<Animal> restored = undoStack.back();
+                undoStack.pop_back();
+                shelter.push_back(restored);
+                cout << "Undid last adoption. " << restored->getName() << " is back in the shelter." << endl;
+            }
+        } else if (choice == 0) {
+            cout << "Goodbye!" << endl;
+        } else {
+            cout << "Invalid menu choice. Please try again." << endl;
+        }
+        printDivider();
     }
+
+    // No manual cleanup is needed because shared_ptr automatically frees all animals 
+    // when 'shelter' and 'undoStack' go out of scope, and unique_ptr cleans up 
+    // the entire AdoptionRecord chain for each animal. This shows why smart pointers 
+    // are safer than raw pointers.
+    return 0;
 }
