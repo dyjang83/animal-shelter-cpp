@@ -152,7 +152,7 @@ void printMenu() {
 
 void demonstrateRawPointer() {
     cout << "[Raw pointer demo]" << endl;
-    Dog* rawDog = new Dog("RawRex", 5); // manual allocation
+    Dog* rawDog = new Dog("Max", 5); // manual allocation
     rawDog->printInfo();
     delete rawDog; // Must manually free, which is easy to forget. Smart pointers would do this automatically.
     rawDog = nullptr; // avoid dangling pointer
